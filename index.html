@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .emoji {
+            font-size: 30px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+    <title>Голосування</title>
+</head>
+<body>
+
+<div id="votingOptions"></div>
+
+<form id="votingForm">
+    <p>Оберіть ваш улюблений смайлик:</p>
+    <div>
+        <label><input type="radio" name="vote" value="0">😃</label>
+        <label><input type="radio" name="vote" value="1">😊</label>
+        <label><input type="radio" name="vote" value="2">😐</label>
+        <label><input type="radio" name="vote" value="3">😕</label>
+        <label><input type="radio" name="vote" value="4">😢</label>
+    </div>
+    <button type="button" onclick="submitVote()">Голосувати</button>
+</form>
+
+<script>
+    const options = ['😃', '😊', '😐', '😕', '😢'];
+    const voteCounters = Array(options.length).fill(0);
+
+    function updateDisplay() {
+        const votingOptionsElement = document.getElementById('votingOptions');
+        votingOptionsElement.innerHTML = '';
+
+        options.forEach((option, index) => {
+            const emojiElement = document.createElement('div');
+            emojiElement.textContent = option;
+            emojiElement.classList.add('emoji');
+            emojiElement.addEventListener('click', () => {
+                voteCounters[index]++;
+                updateDisplay();
+            });
+
+            const counterElement = document.createElement('div');
+            counterElement.textContent = `Голосів: ${voteCounters[index]}`;
+
+            votingOptionsElement.appendChild(emojiElement);
+            votingOptionsElement.appendChild(counterElement);
+        });
+    }
+
+    function submitVote() {
+        const selectedOption = document.querySelector('input[name="vote"]:checked');
+        if (selectedOption) {
+            const index = parseInt(selectedOption.value);
+            voteCounters[index]++;
+            updateDisplay();
+            selectedOption.checked = false;
+        } else {
+            alert("Будь ласка, оберіть смайлик перед голосуванням.");
+        }
+    }
+
+    window.onload = updateDisplay;
+</script>
+
+</body>
+</html>
